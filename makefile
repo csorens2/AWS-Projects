@@ -4,5 +4,5 @@ AWS_OUTPUT  ?= json
 
 deploy-my-first-stack:
 	aws cloudformation deploy \
-		--template-file templates\my-first-stack.yaml \
+		--template-file Projects\MyFirstCloudformationStack\my-first-stack.yaml \
 		--stack-name my-first-stack

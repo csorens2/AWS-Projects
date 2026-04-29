@@ -1,5 +1,5 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: My First Cloudformation Template
+Description: Hello World Template
 
 Resources:
   MyS3Bucket:
