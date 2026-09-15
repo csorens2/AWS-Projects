@@ -9,23 +9,15 @@ using Microsoft.Extensions.Options;
 [Route("[controller]")]
 public class CustomerController : ControllerBase
 {
-    private readonly IDynamoDBContext _context;
-    private readonly DynamoDBOperationConfig _opConfig;
+    private readonly ICartDbContext _context;
+
     private readonly SaveConfig _saveConfig;
 
-    public CustomerController(IDynamoDBContext dbContext, IOptions<DynamoDbOptions> options)
+    public CustomerController(ICartDbContext dbContext, IOptions<CartDbOptions> options)
     {
-        Console.WriteLine($"Testing 1234 {options.Value.CartTableName}");
         _context = dbContext;
 
-        var test = new SaveConfig
-        {
-            OverrideTableName = options.Value.CartTableName
-        };
-        _saveConfig = test;
-
-
-        _opConfig = new DynamoDBOperationConfig
+        _saveConfig = new SaveConfig
         {
             OverrideTableName = options.Value.CartTableName
         };
@@ -36,7 +28,7 @@ public class CustomerController : ControllerBase
     {
         Console.WriteLine("Hello World from Root Get of Customer");
 
-        await _context.SaveAsync(new Cart { CartGuid = Guid.NewGuid().ToString(), }, _saveConfig);
+        await _context.SaveAsync(new Cart { CustomerUserNameHash = Guid.NewGuid().ToString(), }, _saveConfig);
 
         return Ok();
     }

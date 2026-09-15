@@ -1,9 +1,8 @@
 FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 
-#ARG CACHE_BUST=1
-
 WORKDIR /src
-ARG TARGETARCH
+#ARG TARGETARCH
+ARG TARGETARCH=amd64
 COPY ["Api.csproj", "."]
 RUN dotnet restore -a $TARGETARCH
 COPY . .

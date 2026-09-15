@@ -22,6 +22,7 @@ export class StoreApiStack extends cdk.Stack {
     const itemsDBName = 'items'
     const itemsAdminName = 'admin' // DO NOT TOUCH
     const customerGroupName = 'CustomerGroup'
+    const vendorGroupName = 'VendorGroup'
 
     const userPool = new cognito.UserPool(this, 'ApiUserPool', {
       selfSignUpEnabled: true,
@@ -35,6 +36,7 @@ export class StoreApiStack extends cdk.Stack {
     })
 
     const vendorGroup = userPool.addGroup('VendorGroup', {
+      groupName: vendorGroupName,
       precedence: 1
     })
 
@@ -108,7 +110,7 @@ export class StoreApiStack extends cdk.Stack {
     })
 
     const cartDatabase = new dynamodb.TableV2(this, 'CustomerCart', {
-      partitionKey: { name: 'CartGuid', type: dynamodb.AttributeType.STRING }, // DO NOT TOUCH
+      partitionKey: { name: 'CustomerUserName', type: dynamodb.AttributeType.STRING }, // DO NOT TOUCH
       tableName: 'CustomerCart',
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     })
@@ -125,7 +127,8 @@ export class StoreApiStack extends cdk.Stack {
       taskImageOptions: {
         image: ecs.ContainerImage.fromDockerImageAsset(
             new ecrAssets.DockerImageAsset(this, 'ApiImage', {
-              directory: path.join(__dirname, '../api')
+              directory: path.join(__dirname, '../api'),
+              platform: ecrAssets.Platform.LINUX_AMD64,
             })
         ),
         containerPort: 8080,
@@ -134,12 +137,14 @@ export class StoreApiStack extends cdk.Stack {
           itemsDatabaseName: itemsDBName,
           itemsDatabaseUser: itemsAdminName,
 
-          itemPicturesBucketName: itemPictureBucket.bucketName,
-
           DynamoDb__CartTableName: cartDatabase.tableName,
 
-          region: this.region,
-          userPoolId: userPool.userPoolId
+          Api__ItemPicturesBucketName: itemPictureBucket.bucketName,
+          Api__Region: this.region,
+          Api__UserPoolId: userPool.userPoolId,
+          Api__CustomerGroupName: customerGroupName,
+          Api__VendorGroupName: vendorGroupName,
+          //LocalImage: "true",
         },
         secrets: {
           itemsDatabasePassword: ecs.Secret.fromSecretsManager(itemsDatabase.secret!, 'password'),
@@ -154,8 +159,12 @@ export class StoreApiStack extends cdk.Stack {
       vpc: apiVPC,
       circuitBreaker: {
         enable: true,
-        rollback: true
+        rollback: true,
       },
+      runtimePlatform: {
+        cpuArchitecture: ecs.CpuArchitecture.X86_64,
+        operatingSystemFamily: ecs.OperatingSystemFamily.LINUX
+      }
     })
 
     itemPictureBucket.grantReadWrite(ecsService.taskDefinition.taskRole)

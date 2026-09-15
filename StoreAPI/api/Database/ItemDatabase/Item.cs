@@ -1,6 +1,5 @@
 
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 
 namespace Api.Database;
 
@@ -10,4 +9,6 @@ public class Item
     public string Name { get; set; }
 
     public double Price { get; set; }
+
+    public string ItemPictureKey {get; set;}
 }

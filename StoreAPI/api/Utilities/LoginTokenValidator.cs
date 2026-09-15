@@ -4,7 +4,6 @@ using Microsoft.IdentityModel.Tokens;
 
 public class LoginTokenValidator
 {
-
     public static async Task<bool> VerifyJWTAsync(string jwt, string region, string userPoolId)
     {
         using var httpClient = new HttpClient();
@@ -31,13 +30,7 @@ public class LoginTokenValidator
         var handler = new JsonWebTokenHandler();
         TokenValidationResult result = await handler.ValidateTokenAsync(jwt, parameters);
 
-        if (!result.IsValid)
-        {
-            Console.WriteLine($"Invalid JWT: {result.Exception?.Message}");
-            return false;
-        }
-
-        return true;
+        return result.IsValid;
     }
 
     public static List<string> GetCognitoGroups(string jwt)

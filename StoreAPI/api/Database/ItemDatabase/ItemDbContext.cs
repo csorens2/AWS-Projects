@@ -2,11 +2,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api.Database;
 
-public class ApiDbContext : DbContext
+public class ItemDbContext : DbContext
 {
     public DbSet<Item> ItemSet { get; set; }
 
-    public ApiDbContext(DbContextOptions<ApiDbContext> options)
+    public ItemDbContext(DbContextOptions<ItemDbContext> options)
         : base(options)
     {
         

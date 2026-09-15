@@ -9,7 +9,11 @@ This repo contains a series of projects created to learn how to use the AWS CDK 
 
 API: C# and ASP.NET
 
-Construct: ApplicationLoadBalanced Fargate Service
+Group Assignment Lambda: Typescript
+
+Item Database: MySQL
+
+Customer Carts: DynamoDB
 
 ![WebAPIDiagram](StoreAPI/diagram/AppDiagram.png)
 
