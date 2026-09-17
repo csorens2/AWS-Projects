@@ -6,4 +6,7 @@ public class Cart
 {
     [DynamoDBHashKey]
     public string CustomerUserNameHash { get; set; }
+
+    [DynamoDBProperty]
+    public List<string> CartItems {get; set;}
 }

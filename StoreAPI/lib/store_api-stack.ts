@@ -1,4 +1,5 @@
 import * as cdk from 'aws-cdk-lib/core';
+import {CfnOutput, Duration, RemovalPolicy} from 'aws-cdk-lib/core';
 import {Construct} from 'constructs';
 import * as ecs from 'aws-cdk-lib/aws-ecs';
 import * as ec2 from "aws-cdk-lib/aws-ec2";
@@ -10,8 +11,7 @@ import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as cognito from 'aws-cdk-lib/aws-cognito';
 import path from "path";
-import {CfnOutput, Duration} from "aws-cdk-lib/core";
-import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
+import {NodejsFunction} from 'aws-cdk-lib/aws-lambda-nodejs';
 import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as iam from 'aws-cdk-lib/aws-iam';
 
@@ -31,8 +31,8 @@ export class StoreApiStack extends cdk.Stack {
       standardAttributes : {
         email: { required: true, mutable: true}
       },
-      passwordPolicy: {},
       accountRecovery: cognito.AccountRecovery.EMAIL_ONLY,
+      removalPolicy: RemovalPolicy.DESTROY,
     })
 
     const vendorGroup = userPool.addGroup('VendorGroup', {
@@ -110,18 +110,20 @@ export class StoreApiStack extends cdk.Stack {
     })
 
     const cartDatabase = new dynamodb.TableV2(this, 'CustomerCart', {
-      partitionKey: { name: 'CustomerUserName', type: dynamodb.AttributeType.STRING }, // DO NOT TOUCH
+      partitionKey: { name: 'CustomerUserNameHash', type: dynamodb.AttributeType.STRING }, // DO NOT TOUCH
       tableName: 'CustomerCart',
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     })
 
     const logGroup = new logs.LogGroup(this, 'ApiLogGroup', {
       logGroupName: '/ecs/my-aspnet-api',
-      retention: logs.RetentionDays.ONE_MONTH, // adjust as needed
-      removalPolicy: cdk.RemovalPolicy.DESTROY, // or RETAIN for production
+      retention: logs.RetentionDays.ONE_WEEK,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
 
-    const itemPictureBucket = new s3.Bucket(this, 'ItemPictureBucket', {})
+    const itemPictureBucket = new s3.Bucket(this, 'ItemPictureBucket', {
+      removalPolicy: RemovalPolicy.DESTROY,
+    })
 
     const ecsService = new ecsPatterns.ApplicationLoadBalancedFargateService(this, 'ApiFargateService', {
       taskImageOptions: {

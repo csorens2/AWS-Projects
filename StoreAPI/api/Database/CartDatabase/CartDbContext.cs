@@ -17,4 +17,9 @@ public class CartDbContext : ICartDbContext
     {
         return _context.SaveAsync(value, saveConfig);
     }
+
+    public Task<T> LoadAsync<T>(object hashKey)
+    {
+        return _context.LoadAsync<T>(hashKey);
+    }
 }

@@ -1,13 +1,21 @@
+namespace Api.Utilities;
 
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
-public class LoginTokenValidator
+public class LoginTokenTool : ILoginTokenTool
 {
-    public static async Task<bool> VerifyJWTAsync(string jwt, string region, string userPoolId)
+    private readonly ApiOptions _options;
+    
+    public LoginTokenTool(ApiOptions options)
+    {
+        _options = options;
+    }
+
+    public async Task<bool> VerifyJWTAsync(string jwt)
     {
         using var httpClient = new HttpClient();
-        var jwksUrl = $"https://cognito-idp.{region}.amazonaws.com/{userPoolId}/.well-known/jwks.json";
+        var jwksUrl = $"https://cognito-idp.{_options.Region}.amazonaws.com/{_options.UserPoolId}/.well-known/jwks.json";
         string jwksJson = await httpClient.GetStringAsync(jwksUrl);
         var jwks = new JsonWebKeySet(jwksJson);
 
@@ -18,7 +26,7 @@ public class LoginTokenValidator
             RequireSignedTokens = true,
 
             ValidateIssuer = true,
-            ValidIssuer = $"https://cognito-idp.{region}.amazonaws.com/{userPoolId}",
+            ValidIssuer = $"https://cognito-idp.{_options.Region}.amazonaws.com/{_options.UserPoolId}",
 
             ValidateAudience = false,
 
@@ -33,7 +41,7 @@ public class LoginTokenValidator
         return result.IsValid;
     }
 
-    public static List<string> GetCognitoGroups(string jwt)
+    public List<string> GetCognitoGroups(string jwt)
     {
         var handler = new JsonWebTokenHandler();
         JsonWebToken token = handler.ReadJsonWebToken(jwt);
@@ -42,11 +50,22 @@ public class LoginTokenValidator
         var hasGroups = token.TryGetPayloadValue("cognito:groups", out cognitoGroups);
         if (!hasGroups)
         {
-            Console.WriteLine("No cognito groups found");
+            return new List<string>();
         }
 
         return cognitoGroups.ToList();
     }
 
+    public string GetUserName(string jwt)
+    {
+        var handler = new JsonWebTokenHandler();
+        JsonWebToken token = handler.ReadJsonWebToken(jwt);
 
+        string username;
+        token.TryGetPayloadValue("username", out username);
+
+        return username;
+    }
+
+    
 }

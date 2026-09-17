@@ -3,12 +3,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Api.Database;
 
-[PrimaryKey(nameof(Name))]
+[PrimaryKey(nameof(ItemName))]
 public class Item
 {
-    public string Name { get; set; }
+    public required string ItemName { get; set; }
 
-    public double Price { get; set; }
+    public required double Price { get; set; }
 
-    public string ItemPictureKey {get; set;}
+    public required string VendorUserName {get; set;}
+
+    public required string ItemPictureKey {get; set;}
 }
