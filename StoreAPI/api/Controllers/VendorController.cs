@@ -41,49 +41,26 @@ public class VendorController : ControllerBase
         _s3Client = s3Client;
         _tokenTool = tokenTool;
     }
-
-    private ObjectResult InvalidTokenResult()
-    {
-        return Problem(
-                statusCode: StatusCodes.Status401Unauthorized,
-                title: "Unauthorized",
-                detail: "Invalid Login Token");
-    }
-
-    private ObjectResult NonVendorResult()
-    {
-        return Problem(
-                statusCode: StatusCodes.Status403Forbidden,
-                title: "Forbidden",
-                detail: "Must be a vendor account to add items");
-    }
-
-    [HttpGet]
-    public IActionResult RootGet()
-    {
-        return Ok(new { Message = "Hello World from Vendor Root"});
-    }
     
     [HttpPost("NewItem")]
-    [RequestSizeLimit(10_000_000)]
     public async Task<IActionResult> PostNewItem([FromForm] NewItemRequest request)
     {
         var isValid = await _tokenTool.VerifyJWTAsync(request.JWT);
         if (!isValid)
         {
-            return InvalidTokenResult();
+            return new ObjectResult(CommonApiProblems.InvalidToken());
         }
 
         var cognitoGroups = _tokenTool.GetCognitoGroups(request.JWT);
         if (!cognitoGroups.Contains(_options.VendorGroupName))
         {
-            return NonVendorResult();
+            return new ObjectResult(CommonApiProblems.NonVendor());
         }
 
         var previousItem = 
             _context
                 .ItemSet
-                .FirstOrDefault(item => item.ItemName.Equals(request.ItemName, StringComparison.CurrentCultureIgnoreCase));
+                .FirstOrDefault(item => item.ItemName.Equals(request.ItemName));
 
         if (previousItem != null)
         {
@@ -117,27 +94,49 @@ public class VendorController : ControllerBase
                 ItemName = request.ItemName, 
                 Price = request.ItemCost, 
                 ItemPictureKey = itemKey,
-                VendorUserName = _tokenTool.GetUserName(request.JWT)
+                VendorName = _tokenTool.GetUsername(request.JWT)
             });
         _context.SaveChanges();
 
         return Ok();
     }
 
-    [HttpPost("DeleteItem")]
+    [HttpDelete("DeleteItem")]
     public async Task<IActionResult> DeleteItem([FromForm] DeleteRequest request)
     {
         var isValid = await _tokenTool.VerifyJWTAsync(request.JWT);
         if (!isValid)
         {
-            return InvalidTokenResult();
+            return new ObjectResult(CommonApiProblems.InvalidToken());
         }
 
         var cognitoGroups = _tokenTool.GetCognitoGroups(request.JWT);
         if (!cognitoGroups.Contains(_options.VendorGroupName))
         {
-            return NonVendorResult();
+            return new ObjectResult(CommonApiProblems.NonVendor());
         }
+
+        var foundItem = _context.Find<Item>(request.ItemName);
+        if(foundItem == null)
+        {
+            return new ObjectResult(CommonApiProblems.ItemNotFound(request.ItemName));
+        }
+
+        var vendorName = _tokenTool.GetUsername(request.JWT);
+        if (foundItem.VendorName != vendorName)
+        {
+            return 
+                Problem(
+                    title: "Unauthorized",
+                    statusCode: StatusCodes.Status401Unauthorized,
+                    detail: $"Cannot delete item '{request.ItemName}': given vendor is not the vendor that created item"
+                );
+        }
+
+        await _s3Client.DeleteAsync(_options.ItemPicturesBucketName, foundItem.ItemPictureKey, new Dictionary<string,object>());
+
+        _context.Remove(foundItem);
+        _context.SaveChanges();
 
         return Ok();
     }

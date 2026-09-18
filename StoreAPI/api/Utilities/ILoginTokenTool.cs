@@ -7,5 +7,5 @@ public interface ILoginTokenTool
 {
     Task<bool> VerifyJWTAsync(string jwt);
     List<string> GetCognitoGroups(string jwt);
-    string GetUserName(string jwt);
+    string GetUsername(string jwt);
 }

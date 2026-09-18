@@ -1,5 +1,6 @@
 namespace Api.Utilities;
 
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
 
@@ -7,9 +8,9 @@ public class LoginTokenTool : ILoginTokenTool
 {
     private readonly ApiOptions _options;
     
-    public LoginTokenTool(ApiOptions options)
+    public LoginTokenTool(IOptions<ApiOptions> options)
     {
-        _options = options;
+        _options = options.Value;
     }
 
     public async Task<bool> VerifyJWTAsync(string jwt)
@@ -56,7 +57,7 @@ public class LoginTokenTool : ILoginTokenTool
         return cognitoGroups.ToList();
     }
 
-    public string GetUserName(string jwt)
+    public string GetUsername(string jwt)
     {
         var handler = new JsonWebTokenHandler();
         JsonWebToken token = handler.ReadJsonWebToken(jwt);

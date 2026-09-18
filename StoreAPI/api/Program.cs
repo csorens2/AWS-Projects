@@ -3,11 +3,9 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.S3;
 using Api.Database;
+using Api.Utilities;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.InMemory;
-using Microsoft.Extensions.DependencyInjection;
-using System.Runtime;
 
 class API
 {
@@ -19,6 +17,8 @@ class API
         builder.Services.AddControllers();
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
+
+        builder.Services.AddSingleton<ILoginTokenTool, LoginTokenTool>();
 
         var localImage = builder.Configuration.GetValue<bool>("LocalImage");
         if (localImage)

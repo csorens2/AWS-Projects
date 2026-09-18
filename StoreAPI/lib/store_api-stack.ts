@@ -26,12 +26,11 @@ export class StoreApiStack extends cdk.Stack {
 
     const userPool = new cognito.UserPool(this, 'ApiUserPool', {
       selfSignUpEnabled: true,
-      signInAliases: { email: true },
-      autoVerify: { email: true},
+      signInAliases: { username: true },
+      //autoVerify: { email: true},
       standardAttributes : {
         email: { required: true, mutable: true}
       },
-      accountRecovery: cognito.AccountRecovery.EMAIL_ONLY,
       removalPolicy: RemovalPolicy.DESTROY,
     })
 
@@ -110,7 +109,7 @@ export class StoreApiStack extends cdk.Stack {
     })
 
     const cartDatabase = new dynamodb.TableV2(this, 'CustomerCart', {
-      partitionKey: { name: 'CustomerUserNameHash', type: dynamodb.AttributeType.STRING }, // DO NOT TOUCH
+      partitionKey: { name: 'CustomerName', type: dynamodb.AttributeType.STRING }, // DO NOT TOUCH
       tableName: 'CustomerCart',
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     })
@@ -123,6 +122,7 @@ export class StoreApiStack extends cdk.Stack {
 
     const itemPictureBucket = new s3.Bucket(this, 'ItemPictureBucket', {
       removalPolicy: RemovalPolicy.DESTROY,
+      autoDeleteObjects: true,
     })
 
     const ecsService = new ecsPatterns.ApplicationLoadBalancedFargateService(this, 'ApiFargateService', {
