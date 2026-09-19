@@ -61,7 +61,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"ClientId\": \"{{ClientId}}\",\r\n    \"Username\": \"{{Username}}\",\r\n    \"Password\": \"{{Password}}\",\r\n    \"UserAttributes\": [\r\n        {\"Name\": \"email\", \"Value\": \"{{Username}}\"}\r\n    ]\r\n}",
+          "raw": "{\r\n    \"ClientId\": \"{{ClientId}}\",\r\n    \"Username\": \"{{Username}}\",\r\n    \"Password\": \"{{Password}}\",\r\n    \"UserAttributes\": [\r\n        {\"Name\": \"email\", \"Value\": \"{{Email}}\"}\r\n    ]\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -100,7 +100,7 @@
         ],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n  \"AuthFlow\": \"USER_PASSWORD_AUTH\",\r\n  \"ClientId\": \"58oevfod4bknh29f4oerdts47c\",\r\n  \"AuthParameters\": {\r\n    \"USERNAME\": \"csorens22@gmail.com\",\r\n    \"PASSWORD\": \"password\"\r\n  }\r\n}",
+          "raw": "{\r\n  \"AuthFlow\": \"USER_PASSWORD_AUTH\",\r\n  \"ClientId\": \"{{ClientId}}\",\r\n  \"AuthParameters\": {\r\n    \"USERNAME\": \"{{Username}}\",\r\n    \"PASSWORD\": \"{{Password}}\"\r\n  }\r\n}",
           "options": {
             "raw": {
               "language": "json"

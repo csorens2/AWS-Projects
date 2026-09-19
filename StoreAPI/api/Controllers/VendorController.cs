@@ -6,6 +6,7 @@ using Api.Utilities;
 using Api.Database;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Api.Database.ItemDatabase;
 
 public record NewItemRequest
 {

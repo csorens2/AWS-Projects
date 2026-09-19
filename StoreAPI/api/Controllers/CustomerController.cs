@@ -5,6 +5,8 @@ using Api.Database;
 using Amazon.DynamoDBv2.DataModel;
 using Microsoft.Extensions.Options;
 using Api.Utilities;
+using Api.Database.CartDatabase;
+using Api.Database.ItemDatabase;
 
 public record AddItemRequest
 {
@@ -30,6 +32,7 @@ public class CustomerController : ControllerBase
     private readonly ICartDbContext _cartDbContext;
     private readonly ItemDbContext _itemDbContext;
     private readonly SaveConfig _saveConfig;
+    private readonly LoadConfig _loadConfig;
     private readonly ILoginTokenTool _loginTokenTool;
 
     public CustomerController(
@@ -41,6 +44,10 @@ public class CustomerController : ControllerBase
         _cartDbContext = cartContext;
         _itemDbContext = itemContext;
         _saveConfig = new SaveConfig
+        {
+            OverrideTableName = options.Value.CartTableName
+        };
+        _loadConfig = new LoadConfig
         {
             OverrideTableName = options.Value.CartTableName
         };
@@ -56,7 +63,7 @@ public class CustomerController : ControllerBase
             return new ObjectResult(CommonApiProblems.InvalidToken());
         }
 
-        var foundItem = _itemDbContext.Find<Item>(new Item {ItemName = request.ItemName});
+        var foundItem = _itemDbContext.Find<Item>(request.ItemName);
         if(foundItem == null)
         {
             return new ObjectResult(CommonApiProblems.ItemNotFound(request.ItemName));
@@ -64,23 +71,15 @@ public class CustomerController : ControllerBase
 
         var customerName = _loginTokenTool.GetUsername(request.JWT);
         
-        var customerCart = await _cartDbContext.LoadAsync<Cart>(customerName);
-        if(customerCart == null)
-        {
-            customerCart = new Cart { CustomerName = customerName, CartItems = new List<string>()};
-        }
-        
-        if(customerCart.CartItems.Contains(request.ItemName, StringComparer.OrdinalIgnoreCase))
-        {
-            return 
-                Problem(
-                    title: "Conflict",
-                    statusCode: StatusCodes.Status409Conflict,
-                    detail: $"Item '{request.ItemName}' is already in the cart"
-                );
-        }
+        var customerCart = await _cartDbContext.LoadAsync<Cart>(customerName, _loadConfig);
+        customerCart ??= new Cart { CustomerName = customerName, CartItems = new Dictionary<string, int>()};
 
-        customerCart.CartItems.Add(request.ItemName);
+        if(!customerCart.CartItems.ContainsKey(request.ItemName))
+        {
+            customerCart.CartItems.Add(request.ItemName, 0);
+        }
+        customerCart.CartItems[request.ItemName] += 1;
+
         await _cartDbContext.SaveAsync(customerCart, _saveConfig);
 
         return Ok();
@@ -97,7 +96,7 @@ public class CustomerController : ControllerBase
 
         var customerName = _loginTokenTool.GetUsername(request.JWT);
         
-        var customerCart = await _cartDbContext.LoadAsync<Cart>(customerName);
+        var customerCart = await _cartDbContext.LoadAsync<Cart>(customerName, _loadConfig);
         if(customerCart == null)
         {
             return 
@@ -108,7 +107,7 @@ public class CustomerController : ControllerBase
                 );
         }
 
-        if(!customerCart.CartItems.Contains(request.ItemName, StringComparer.OrdinalIgnoreCase))
+        if(!customerCart.CartItems.ContainsKey(request.ItemName))
         {
             return 
                 Problem(
@@ -134,7 +133,7 @@ public class CustomerController : ControllerBase
         }
 
         var customerName = _loginTokenTool.GetUsername(request.JWT);
-        var customerCart = await _cartDbContext.LoadAsync<Cart>(customerName);
+        var customerCart = await _cartDbContext.LoadAsync<Cart>(customerName, _loadConfig);
         if(customerCart == null)
         {
             return 

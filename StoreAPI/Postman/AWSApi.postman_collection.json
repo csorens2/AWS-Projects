@@ -7,23 +7,6 @@
   },
   "item": [
     {
-      "name": "Vendor Root Get",
-      "request": {
-        "method": "GET",
-        "header": [],
-        "url": {
-          "raw": "{{API_URL}}/Vendor",
-          "host": [
-            "{{API_URL}}"
-          ],
-          "path": [
-            "Vendor"
-          ]
-        }
-      },
-      "response": []
-    },
-    {
       "name": "Vendor Add Item",
       "request": {
         "method": "POST",
@@ -35,12 +18,12 @@
               "key": "ItemPicture",
               "type": "file",
               "src": [
-                "/C:/Users/csore/Desktop/screw-image.png"
+                "/Users/christophersorenson/Documents/GitHub/AWS-Projects/StoreAPI/Postman/screw.png"
               ]
             },
             {
               "key": "ItemName",
-              "value": "screw",
+              "value": "Screw",
               "type": "text"
             },
             {
@@ -50,7 +33,7 @@
             },
             {
               "key": "JWT",
-              "value": "eyJraWQiOiJDdmYzK2h6R0ZZaDkzVjROd2pqWmxDa1ZQTVlOMGlhWHZKdy96S0tUbTlNPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJmNDc4YzRlOC04MDgxLTcwZTEtNGQzYy0yODg0MTY5MzYxMTIiLCJjb2duaXRvOmdyb3VwcyI6WyJDdXN0b21lckdyb3VwIl0sImlzcyI6Imh0dHBzOi8vY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb20vdXMtZWFzdC0xX3BVR1N3Y1NMWCIsImNsaWVudF9pZCI6IjU4b2V2Zm9kNGJrbmgyOWY0b2VyZHRzNDdjIiwib3JpZ2luX2p0aSI6ImNmMDdmOTBhLWFjMDMtNGUzYS1iZjJkLTY0OGVkNTM5ODZhNyIsImV2ZW50X2lkIjoiMDJmOTI2MjAtZjEwMS00NWZiLWIwZjUtY2FkMTJmMjVjMmQ1IiwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJhd3MuY29nbml0by5zaWduaW4udXNlci5hZG1pbiIsImF1dGhfdGltZSI6MTc4ODU3ODQ3MSwiZXhwIjoxNzg4NTgyMDcxLCJpYXQiOjE3ODg1Nzg0NzIsImp0aSI6IjMyODlkODMwLWRkNDctNDQ4Ni1iMjg2LWU1OWUzYWJiMDRiMyIsInVzZXJuYW1lIjoiZjQ3OGM0ZTgtODA4MS03MGUxLTRkM2MtMjg4NDE2OTM2MTEyIn0.jJbYye0640NrH9MdfG2wUpWpyUg31SEH1FdsvvT4ShAUerp8lnZ0wllYz58MKtsxpeMwfYVnYYgHF5Eg8vmMenzsbUgkmUliz6LE4Rv2kEqWu5gI_O6fNP40V5_Zw75w1ONaJVSp6hP5WpXyOqqnVECgcXf1bWaT1hJSQ7MhdYaDS0DLUtEE7lmvcIQ1rOOku4wyWP0KxYMJJmD7fAR813Qk0Renfn438WzfMyemfx3uVFM3T3pIEtsFd999klVWAxR_3JICO-99v-fNri1nJ6L9i4IFjn52reNNsSRqKtGOJssmzOZqPW0GPTkGb5lSWIRQ5t4W_YpdFNnOqfDKrw",
+              "value": "",
               "type": "text"
             }
           ]
@@ -69,17 +52,138 @@
       "response": []
     },
     {
-      "name": "Customer Root Get",
+      "name": "Vendor Delete Item",
       "request": {
-        "method": "GET",
+        "method": "DELETE",
         "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "ItemName",
+              "value": "Screw",
+              "type": "text"
+            },
+            {
+              "key": "JWT",
+              "value": "eyJraWQiOiJlZzZQcjVoRExxOWJPZDFTTVRIS2NVaWRlNS9PajhuWWROQjhSWWxPalU4PSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiI2NDE4OTRkOC00MDcxLTcwYTctNTY5Ny00MjRkMDVmOWU4OWIiLCJjb2duaXRvOmdyb3VwcyI6WyJDdXN0b21lckdyb3VwIl0sImlzcyI6Imh0dHBzOi8vY29nbml0by1pZHAudXMtZWFzdC0xLmFtYXpvbmF3cy5jb20vdXMtZWFzdC0xX0Y2TWM3UlVCRyIsImNsaWVudF9pZCI6IjQxNmg1djc5dnRsMnQ3cjZidDBzbHJjbjBiIiwib3JpZ2luX2p0aSI6ImQ3M2NlOGQ1LTM4MDQtNDEzZS1iM2Q2LTA2ZGRkYTliZDAzYSIsImV2ZW50X2lkIjoiMzViNTEyMzEtMzg5OC00ZWE2LTlmYmUtNmYzZTdhODRlZTgxIiwidG9rZW5fdXNlIjoiYWNjZXNzIiwic2NvcGUiOiJhd3MuY29nbml0by5zaWduaW4udXNlci5hZG1pbiIsImF1dGhfdGltZSI6MTc4OTcwMzA5MywiZXhwIjoxNzg5NzA2NjkzLCJpYXQiOjE3ODk3MDMwOTQsImp0aSI6Ijg2YzgxNTU5LWJkYmYtNGYxMi04OGU3LWQ3YTM5NmI5Njc0NyIsInVzZXJuYW1lIjoiQWNlSGFyZHdhcmUifQ.SSGD9J7-mT-wF1r_DSPP6vCeP4NgC9a4SocGPHIC0sO5MeqQfH9JNffIXtg3_Z8x4EtJNNMitVOvm9PpwNh0B0RYuQGy92EQZSkuUzYgL5WoA5uvec4pTPLBItNmNLPMvk2UcL4JJyFYrRvso-PBzWXReUQJETAr4ZYKsix_wVT901fjeBDLrIELEZs5IW3u2BOjPW9LlrsfjENxrAErvXRuEeHMeqh-osFaqN19aS998tOIFcW4fBYhk_It4M4V4Ot1f3sKssQ-M-CM0wsO144XHPHfpxfDpLA3ikBwrUx7GNVb6IfCcIFIMQeu7d4KAmG6NxD6LJenbI-4CBiTuQ",
+              "type": "text"
+            }
+          ]
+        },
         "url": {
-          "raw": "{{API_URL}}/Customer",
+          "raw": "{{API_URL}}/Vendor/DeleteItem",
           "host": [
             "{{API_URL}}"
           ],
           "path": [
-            "Customer"
+            "Vendor",
+            "DeleteItem"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Customer Add Item",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "ItemName",
+              "value": "Screw",
+              "type": "text"
+            },
+            {
+              "key": "JWT",
+              "value": "",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{API_URL}}/Customer/AddToCart",
+          "host": [
+            "{{API_URL}}"
+          ],
+          "path": [
+            "Customer",
+            "AddToCart"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Customer Delete Item",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "JWT",
+            "value": "eyJraWQiOiJSMG1RYldzdGloQ3A4MGJuYndmY0l5eTh1SDZtOHNRSjB6S3pNTkJOQUFvPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJhNGU4NDQ5OC01MDUxLTcwMjQtZmI3NC0yNjUzY2I2OGM5ZWYiLCJjb2duaXRvOmdyb3VwcyI6WyJDdXN0b21lckdyb3VwIiwiVmVuZG9yR3JvdXAiXSwiaXNzIjoiaHR0cHM6Ly9jb2duaXRvLWlkcC51cy1lYXN0LTEuYW1hem9uYXdzLmNvbS91cy1lYXN0LTFfTFBvRFFGZzQwIiwiY2xpZW50X2lkIjoiNjRxNHAxc3BiaDkwcGtvNzc1YXRlbzFhb2kiLCJvcmlnaW5fanRpIjoiZGZiN2Q5NDYtODM5YS00NDMwLTgyNzItMjk1NTY2ZDYwYzY4IiwiZXZlbnRfaWQiOiI4NmZlYjIzOS0xYjlkLTQxNTEtOWQ5NC1mYTY2NDRkNWM2MzMiLCJ0b2tlbl91c2UiOiJhY2Nlc3MiLCJzY29wZSI6ImF3cy5jb2duaXRvLnNpZ25pbi51c2VyLmFkbWluIiwiYXV0aF90aW1lIjoxNzg5Nzg3OTgzLCJleHAiOjE3ODk3OTE1ODMsImlhdCI6MTc4OTc4Nzk4MywianRpIjoiZmEwNTE3MzctNmUxNy00NDdmLWI4YTgtNTZjMTU0NjAwZWVhIiwidXNlcm5hbWUiOiJBY2VIYXJkd2FyZSJ9.rTEA7rIiWm2Hvzl0MM65fhH5H1kke7Ia-uHgNvoU0KRmVazVNTD138cMB5vTqvEJq_JJXmBLAm-FpBnWuqtwGXgqRjl4nPsXLRk2TWshYxTKIpmKSyUtRziJ-PstvJ0t0mR7BbhDVSqwluAuK0aC0B-iIcUwYaDeRYl5AKSx1NXpcJLqN0l4yhz1hkAZG-W6xCtaqTZzFSshb43Z4IhenqRbbZemVfaWYZ9pcXblZw029RYJdo92H9rZIl69bTE21035SH1akFLgMbFkkc8KsXtqV0ey2cy7cKkO8sDBYRPDBgtO1aMwZ93rKE6uZa-sM_CVJ9hLcSVDAWj2hPkNpg",
+            "disabled": true
+          },
+          {
+            "key": "ItemName",
+            "value": "Screw",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "JWT",
+              "value": "",
+              "type": "text"
+            },
+            {
+              "key": "ItemName",
+              "value": "Screw",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{API_URL}}/Customer/DeleteFromCart",
+          "host": [
+            "{{API_URL}}"
+          ],
+          "path": [
+            "Customer",
+            "DeleteFromCart"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Customer Get Cart",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "JWT",
+              "value": "",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{API_URL}}/Customer/GetCart",
+          "host": [
+            "{{API_URL}}"
+          ],
+          "path": [
+            "Customer",
+            "GetCart"
           ]
         }
       },

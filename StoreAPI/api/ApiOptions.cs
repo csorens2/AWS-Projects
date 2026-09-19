@@ -1,3 +1,5 @@
+namespace Api;
+
 using System.ComponentModel.DataAnnotations;
 
 public class ApiOptions

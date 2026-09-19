@@ -1,6 +1,6 @@
-
+namespace Api.Database.CartDatabase;
 
 public class CartDbOptions
 {
-    public string CartTableName { get; set; }
+    public required string CartTableName { get; set; }
 }

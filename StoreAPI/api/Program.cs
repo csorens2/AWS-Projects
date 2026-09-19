@@ -1,8 +1,11 @@
+namespace Api;
 
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using Amazon.S3;
-using Api.Database;
+using Api.Controllers;
+using Api.Database.CartDatabase;
+using Api.Database.ItemDatabase;
 using Api.Utilities;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.EntityFrameworkCore;
@@ -93,11 +96,9 @@ class API
 
         if (!localImage)
         {
-            using (var scope = app.Services.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<ItemDbContext>();
-                dbContext.Database.EnsureCreated();
-            }
+            using var scope = app.Services.CreateScope();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ItemDbContext>();
+            dbContext.Database.EnsureCreated();
         }
 
         // Configure the HTTP request pipeline.

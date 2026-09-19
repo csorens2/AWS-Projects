@@ -1,6 +1,6 @@
-using Microsoft.EntityFrameworkCore;
+namespace Api.Database.ItemDatabase;
 
-namespace Api.Database;
+using Microsoft.EntityFrameworkCore;
 
 public class ItemDbContext : DbContext
 {

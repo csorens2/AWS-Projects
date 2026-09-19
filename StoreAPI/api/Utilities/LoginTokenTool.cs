@@ -1,5 +1,6 @@
 namespace Api.Utilities;
 
+using Api.Controllers;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;

@@ -3,17 +3,19 @@
 ## Overview
 This repo contains a series of projects created to learn how to use the AWS CDK and other AWS technologies
 
-### Store API (Under Construction)
+### Store API
 
 #### Tech Stack:
 
-API: C# and ASP.NET
+API: C#, ASP.NET, Entity Framework
 
 Group Assignment Lambda: Typescript
 
 Item Database: MySQL
 
 Customer Carts: DynamoDB
+
+User Management: Cognito
 
 ![WebAPIDiagram](StoreAPI/diagram/AppDiagram.png)
 
@@ -47,9 +49,6 @@ Lambda: Go, Docker
 
 ### Future Project Ideas
 
-* WebAPI
 * EC2 and High Performance Computing
 * Disaster Recovery with Chaos Monkey
-* Container Management Project
-* Multi-Stack Project
 * CI/CD

@@ -27,7 +27,6 @@ export class StoreApiStack extends cdk.Stack {
     const userPool = new cognito.UserPool(this, 'ApiUserPool', {
       selfSignUpEnabled: true,
       signInAliases: { username: true },
-      //autoVerify: { email: true},
       standardAttributes : {
         email: { required: true, mutable: true}
       },
@@ -101,7 +100,8 @@ export class StoreApiStack extends cdk.Stack {
       }),
       vpc: apiVPC,
       vpcSubnets: {
-        subnetType: ec2.SubnetType.PUBLIC
+        subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS
+        //subnetType: ec2.SubnetType.PUBLIC
       },
       credentials: rds.Credentials.fromUsername(itemsAdminName), // DO NOT TOUCH
       removalPolicy: cdk.RemovalPolicy.DESTROY,
@@ -176,7 +176,7 @@ export class StoreApiStack extends cdk.Stack {
         ecsService.service,
     );
 
-    itemsDatabase.connections.allowDefaultPortFromAnyIpv4()
+    //itemsDatabase.connections.allowDefaultPortFromAnyIpv4()
 
     new cdk.CfnOutput(this, 'ItemsDatabaseEndpoint', {
       value: itemsDatabase.instanceEndpoint.hostname

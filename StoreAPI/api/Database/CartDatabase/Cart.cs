@@ -1,12 +1,12 @@
-
+namespace Api.Database.CartDatabase;
 
 using Amazon.DynamoDBv2.DataModel;
 
 public class Cart
 {
     [DynamoDBHashKey]
-    public string CustomerName { get; set; }
+    public required string CustomerName { get; set; }
 
     [DynamoDBProperty]
-    public List<string> CartItems {get; set;}
+    public required Dictionary<string, int> CartItems {get; set;}
 }

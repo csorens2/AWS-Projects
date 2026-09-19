@@ -1,8 +1,6 @@
+namespace Api.Database.CartDatabase;
 
-
-using System.Data.Common;
 using Amazon.DynamoDBv2.DataModel;
-using Microsoft.Extensions.Options;
 
 public class CartDbContext : ICartDbContext
 {
@@ -18,8 +16,8 @@ public class CartDbContext : ICartDbContext
         return _context.SaveAsync(value, saveConfig);
     }
 
-    public Task<T> LoadAsync<T>(object hashKey)
+    public Task<T> LoadAsync<T>(object hashKey, LoadConfig config)
     {
-        return _context.LoadAsync<T>(hashKey);
+        return _context.LoadAsync<T>(hashKey, config);
     }
 }
